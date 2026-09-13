@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SearX Corpus Studio</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <main class="shell">
+    <header>
+      <div>
+        <p class="eyebrow">LOCAL WEB DATA PIPELINE</p>
+        <h1>SearX Corpus Studio</h1>
+        <p class="muted">Search via SearXNG → crawl public pages → clean Markdown → searchable library → training corpus.</p>
+      </div>
+      <div class="pill">SearXNG: {{ searxng_url }}</div>
+    </header>
+
+    <section class="stats" id="stats"></section>
+
+    <nav class="tabs">
+      <button class="tab active" data-tab="search">Search & Crawl</button>
+      <button class="tab" data-tab="library">Library</button>
+      <button class="tab" data-tab="archives">Archives & Corpora</button>
+    </nav>
+
+    <section id="tab-search" class="panel active">
+      <div class="card">
+        <h2>New web collection</h2>
+        <div class="search-row">
+          <input id="web-query" placeholder="e.g. local LLM research" />
+          <input id="max-results" type="number" min="1" max="500" value="100" />
+          <button id="start-search" class="primary">Search + Crawl</button>
+        </div>
+        <p class="hint">Target result count is best-effort. Upstream engines and websites may return fewer results or block requests.</p>
+      </div>
+      <div class="card">
+        <div class="card-head"><h2>Jobs</h2><button id="refresh-jobs">Refresh</button></div>
+        <div id="jobs"></div>
+      </div>
+    </section>
+
+    <section id="tab-library" class="panel">
+      <div class="card">
+        <h2>Search extracted data</h2>
+        <div class="search-row">
+          <input id="library-query" placeholder="Search title, domain, or full extracted text" />
+          <button id="library-search" class="primary">Search Library</button>
+        </div>
+      </div>
+      <div id="library-results" class="grid"></div>
+    </section>
+
+    <section id="tab-archives" class="panel">
+      <div class="two-col">
+        <div class="card"><h2>ZIP archives</h2><div id="archives"></div></div>
+        <div class="card"><h2>Training corpora</h2><div id="corpora"></div></div>
+      </div>
+    </section>
+
+    <footer class="project-footer">
+      <div><strong>Developed by: Ali Jahani</strong></div>
+      <div class="footer-links">
+        <span>Telegram channel: <a href="https://t.me/tarfandoonchannel" target="_blank" rel="noopener noreferrer">https://t.me/tarfandoonchannel</a></span>
+        <span>Website: <a href="https://jahaniwww.com" target="_blank" rel="noopener noreferrer">jahaniwww.com</a></span>
+      </div>
+    </footer>
+  </main>
+
+  <dialog id="doc-dialog">
+    <div class="dialog-head"><strong id="doc-title"></strong><button id="doc-close">Close</button></div>
+    <div id="doc-meta" class="muted"></div>
+    <pre id="doc-content"></pre>
+  </dialog>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

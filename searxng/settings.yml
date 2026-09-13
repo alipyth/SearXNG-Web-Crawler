@@ -1,0 +1,16 @@
+use_default_settings: true
+
+general:
+  instance_name: "SearX Corpus Studio"
+
+server:
+  secret_key: "NzMpWbu8En8foDubz73JdFRx1VnNbSgm"
+  image_proxy: true
+  limiter: false
+  public_instance: false
+
+search:
+  safe_search: 0
+  formats:
+    - html
+    - json

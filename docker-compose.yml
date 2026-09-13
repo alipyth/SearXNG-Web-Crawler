@@ -1,0 +1,57 @@
+services:
+  searxng:
+    image: ${SEARXNG_IMAGE:-searxng/searxng:2026.9.11-ffe96f8a6}
+    container_name: searx-corpus-searxng
+    restart: unless-stopped
+    labels:
+      org.opencontainers.image.title: "SearX Corpus Studio - SearXNG"
+      org.opencontainers.image.authors: "Ali Jahani"
+      org.opencontainers.image.url: "https://jahaniwww.com"
+      com.alijahani.telegram: "https://t.me/tarfandoonchannel"
+      com.alijahani.website: "https://jahaniwww.com"
+    ports:
+      - "${SEARXNG_PORT:-8444}:8080"
+    volumes:
+      - ./searxng/settings.yml:/etc/searxng/settings.yml:ro
+      - searxng-cache:/var/cache/searxng
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1:8080/ || exit 1"]
+      interval: 20s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build: .
+    container_name: searx-corpus-app
+    restart: unless-stopped
+    depends_on:
+      - searxng
+    labels:
+      org.opencontainers.image.title: "SearX Corpus Studio"
+      org.opencontainers.image.authors: "Ali Jahani"
+      org.opencontainers.image.url: "https://jahaniwww.com"
+      com.alijahani.telegram: "https://t.me/tarfandoonchannel"
+      com.alijahani.website: "https://jahaniwww.com"
+    environment:
+      SEARXNG_URL: http://searxng:8080
+      DATA_DIR: /data
+      MAX_RESULTS: ${MAX_RESULTS:-100}
+      MAX_SEARCH_PAGES: ${MAX_SEARCH_PAGES:-20}
+      CRAWL_WORKERS: ${CRAWL_WORKERS:-6}
+      RESPECT_ROBOTS_TXT: ${RESPECT_ROBOTS_TXT:-true}
+      MIN_CONTENT_LENGTH: ${MIN_CONTENT_LENGTH:-300}
+      APP_DEVELOPER: "Ali Jahani"
+      APP_TELEGRAM: "https://t.me/tarfandoonchannel"
+      APP_WEBSITE: "https://jahaniwww.com"
+    ports:
+      - "${APP_PORT:-7860}:8000"
+    volumes:
+      - ./data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:8000/api/health >/dev/null || exit 1"]
+      interval: 20s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  searxng-cache:
