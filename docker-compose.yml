@@ -1,10 +1,10 @@
 services:
   searxng:
-    image: ${SEARXNG_IMAGE:-searxng/searxng:2026.9.11-ffe96f8a6}
-    container_name: searx-corpus-searxng
+    image: ${SEARXNG_IMAGE:-searxng/searxng:latest}
+    container_name: searxng-web-crawler-searxng
     restart: unless-stopped
     labels:
-      org.opencontainers.image.title: "SearX Corpus Studio - SearXNG"
+      org.opencontainers.image.title: "SearXNG Web Crawler - SearXNG"
       org.opencontainers.image.authors: "Ali Jahani"
       org.opencontainers.image.url: "https://jahaniwww.com"
       com.alijahani.telegram: "https://t.me/tarfandoonchannel"
@@ -22,21 +22,23 @@ services:
 
   app:
     build: .
-    container_name: searx-corpus-app
+    container_name: searxng-web-crawler-app
     restart: unless-stopped
     depends_on:
       - searxng
     labels:
-      org.opencontainers.image.title: "SearX Corpus Studio"
+      org.opencontainers.image.title: "SearXNG Web Crawler"
       org.opencontainers.image.authors: "Ali Jahani"
       org.opencontainers.image.url: "https://jahaniwww.com"
+      org.opencontainers.image.source: "https://github.com/alipyth/SearXNG-Web-Crawler"
       com.alijahani.telegram: "https://t.me/tarfandoonchannel"
       com.alijahani.website: "https://jahaniwww.com"
     environment:
       SEARXNG_URL: http://searxng:8080
       DATA_DIR: /data
       MAX_RESULTS: ${MAX_RESULTS:-100}
-      MAX_SEARCH_PAGES: ${MAX_SEARCH_PAGES:-20}
+      MAX_RESULTS_LIMIT: ${MAX_RESULTS_LIMIT:-10000}
+      MAX_SEARCH_PAGES: ${MAX_SEARCH_PAGES:-2000}
       CRAWL_WORKERS: ${CRAWL_WORKERS:-6}
       RESPECT_ROBOTS_TXT: ${RESPECT_ROBOTS_TXT:-true}
       MIN_CONTENT_LENGTH: ${MIN_CONTENT_LENGTH:-300}

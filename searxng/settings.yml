@@ -1,7 +1,7 @@
 use_default_settings: true
 
 general:
-  instance_name: "SearX Corpus Studio"
+  instance_name: "SearXNG Web Crawler"
 
 server:
   secret_key: "NzMpWbu8En8foDubz73JdFRx1VnNbSgm"

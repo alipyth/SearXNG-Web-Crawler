@@ -3,9 +3,9 @@ requires = ["setuptools>=75", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "searx-corpus-studio"
-version = "1.0.0"
-description = "SearXNG-powered web search, crawler, Markdown archive, searchable library, and LLM corpus builder."
+name = "searxng-web-crawler"
+version = "2.0.0"
+description = "Dockerized SearXNG web crawler with Markdown extraction, JSON/CSV/MD export, full-text search, and clean LLM corpus generation."
 requires-python = ">=3.11"
 dependencies = [
   "fastapi==0.116.1",
@@ -18,7 +18,7 @@ dependencies = [
 ]
 
 [project.scripts]
-searx-corpus = "app.cli:main"
+searxng-crawler = "app.cli:main"
 
 [tool.setuptools.packages.find]
 include = ["app*"]

@@ -7,11 +7,27 @@ def test_normalize_url_removes_tracking_and_fragment():
     assert normalize_url(url) == 'https://example.com/a?keep=1'
 
 
-def test_clean_markdown_removes_frontmatter_and_images():
-    text = '---\ntitle: X\n---\n\n# Hello\n\n![x](a.png)\n\nWorld'
+def test_clean_markdown_removes_frontmatter_images_and_links():
+    text = '''---
+title: X
+url: "https://example.com"
+---
+
+# Hello
+
+![x](https://example.com/a.png)
+
+Read [this article](https://example.com/article) now.
+Raw: https://example.com/another
+
+World
+'''
     cleaned = clean_markdown(text)
     assert 'title: X' not in cleaned
     assert 'a.png' not in cleaned
+    assert 'https://' not in cleaned
+    assert '[this article]' not in cleaned
+    assert 'this article' in cleaned
     assert '# Hello' in cleaned
 
 

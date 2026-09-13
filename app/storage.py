@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import json
 import sqlite3
 import threading
 from datetime import datetime, timezone
@@ -120,12 +119,21 @@ def get_job(job_id: str) -> dict[str, Any] | None:
     return dict(row) if row else None
 
 
-def list_jobs(limit: int = 50) -> list[dict[str, Any]]:
+def list_jobs(limit: int = 100) -> list[dict[str, Any]]:
     with _connect() as conn:
         rows = conn.execute(
             'SELECT * FROM jobs ORDER BY created_at DESC LIMIT ?', (limit,)
         ).fetchall()
     return [dict(r) for r in rows]
+
+
+def delete_job(job_id: str) -> dict[str, Any] | None:
+    with _lock, _connect() as conn:
+        row = conn.execute('SELECT * FROM jobs WHERE id = ?', (job_id,)).fetchone()
+        if not row:
+            return None
+        conn.execute('DELETE FROM jobs WHERE id = ?', (job_id,))
+    return dict(row)
 
 
 def upsert_document(doc: dict[str, Any]) -> int:
@@ -213,6 +221,15 @@ def get_document(doc_id: int) -> dict[str, Any] | None:
     with _connect() as conn:
         row = conn.execute('SELECT * FROM documents WHERE id = ?', (doc_id,)).fetchone()
     return dict(row) if row else None
+
+
+def delete_document(doc_id: int) -> dict[str, Any] | None:
+    with _lock, _connect() as conn:
+        row = conn.execute('SELECT * FROM documents WHERE id = ?', (doc_id,)).fetchone()
+        if not row:
+            return None
+        conn.execute('DELETE FROM documents WHERE id = ?', (doc_id,))
+    return dict(row)
 
 
 def stats() -> dict[str, Any]:

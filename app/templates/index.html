@@ -3,18 +3,24 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>SearX Corpus Studio</title>
+  <title>SearXNG Web Crawler</title>
   <link rel="stylesheet" href="/static/style.css" />
 </head>
 <body>
   <main class="shell">
-    <header>
+    <header class="hero">
       <div>
-        <p class="eyebrow">LOCAL WEB DATA PIPELINE</p>
-        <h1>SearX Corpus Studio</h1>
-        <p class="muted">Search via SearXNG → crawl public pages → clean Markdown → searchable library → training corpus.</p>
+        <p class="eyebrow">OPEN-SOURCE WEB DATA PIPELINE</p>
+        <h1>SearXNG Web Crawler</h1>
+        <p class="hero-copy">Search the web → crawl public pages → extract clean Markdown → search locally → export datasets for LLM training.</p>
+        <div class="hero-badges">
+          <span>JSON</span><span>CSV</span><span>Markdown</span><span>Up to 10,000 requested results</span>
+        </div>
       </div>
-      <div class="pill">SearXNG: {{ searxng_url }}</div>
+      <div class="service-card">
+        <span class="dot"></span>
+        <div><small>SearXNG service</small><strong>{{ searxng_url }}</strong></div>
+      </div>
     </header>
 
     <section class="stats" id="stats"></section>
@@ -26,26 +32,26 @@
     </nav>
 
     <section id="tab-search" class="panel active">
-      <div class="card">
-        <h2>New web collection</h2>
+      <div class="card accent-card">
+        <div class="card-head"><div><p class="mini-label">NEW COLLECTION</p><h2>Search the web</h2></div><span class="soft-pill">Best effort</span></div>
         <div class="search-row">
-          <input id="web-query" placeholder="e.g. local LLM research" />
-          <input id="max-results" type="number" min="1" max="500" value="100" />
+          <input id="web-query" placeholder="e.g. Persian language model research" />
+          <input id="max-results" type="number" min="1" max="{{ max_results_limit }}" value="100" title="Requested result count" />
           <button id="start-search" class="primary">Search + Crawl</button>
         </div>
-        <p class="hint">Target result count is best-effort. Upstream engines and websites may return fewer results or block requests.</p>
+        <p class="hint">Request between 1 and {{ max_results_limit }} results. Actual results depend on SearXNG engines, pagination, duplicate URLs, rate limits, robots.txt, and destination websites.</p>
       </div>
       <div class="card">
-        <div class="card-head"><h2>Jobs</h2><button id="refresh-jobs">Refresh</button></div>
+        <div class="card-head"><div><p class="mini-label">HISTORY</p><h2>Search jobs</h2></div><button id="refresh-jobs">Refresh</button></div>
         <div id="jobs"></div>
       </div>
     </section>
 
     <section id="tab-library" class="panel">
       <div class="card">
-        <h2>Search extracted data</h2>
-        <div class="search-row">
-          <input id="library-query" placeholder="Search title, domain, or full extracted text" />
+        <div class="card-head"><div><p class="mini-label">LOCAL FULL-TEXT SEARCH</p><h2>Search extracted data</h2></div></div>
+        <div class="library-search-row">
+          <input id="library-query" placeholder="Search titles, domains, or full extracted text" />
           <button id="library-search" class="primary">Search Library</button>
         </div>
       </div>
@@ -54,16 +60,29 @@
 
     <section id="tab-archives" class="panel">
       <div class="two-col">
-        <div class="card"><h2>ZIP archives</h2><div id="archives"></div></div>
-        <div class="card"><h2>Training corpora</h2><div id="corpora"></div></div>
+        <div class="card">
+          <div class="card-head"><div><p class="mini-label">RAW COLLECTION EXPORTS</p><h2>Archives</h2></div></div>
+          <p class="hint">Every search can be downloaded as ZIP, JSON, CSV, or Markdown.</p>
+          <div id="archives"></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><div><p class="mini-label">LLM-READY BOOK MODE</p><h2>Clean corpora</h2></div></div>
+          <p class="hint">Book-mode corpora remove frontmatter, images, hyperlink destinations, raw URLs, HTML noise, short pages, and exact duplicates.</p>
+          <div id="corpora"></div>
+        </div>
       </div>
     </section>
 
-    <footer class="project-footer">
-      <div><strong>Developed by: Ali Jahani</strong></div>
-      <div class="footer-links">
-        <span>Telegram channel: <a href="https://t.me/tarfandoonchannel" target="_blank" rel="noopener noreferrer">https://t.me/tarfandoonchannel</a></span>
-        <span>Website: <a href="https://jahaniwww.com" target="_blank" rel="noopener noreferrer">jahaniwww.com</a></span>
+    <footer class="brand-footer">
+      <div class="brand-mark">AJ</div>
+      <div class="brand-copy">
+        <span class="brand-kicker">CREATED & MAINTAINED BY</span>
+        <strong>Ali Jahani</strong>
+        <p>Open-source tools for web data, AI and language-model research.</p>
+      </div>
+      <div class="brand-links">
+        <a href="{{ telegram }}" target="_blank" rel="noopener noreferrer"><span>Telegram</span><b>@tarfandoonchannel</b></a>
+        <a href="{{ website }}" target="_blank" rel="noopener noreferrer"><span>Website</span><b>jahaniwww.com</b></a>
       </div>
     </footer>
   </main>
